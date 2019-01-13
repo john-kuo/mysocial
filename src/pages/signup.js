@@ -62,7 +62,7 @@ class signup extends Component {
             this.setState({
                 loading: false
             });
-            this.props.history.push('/');
+            window.location.href = '/profile';
         })
         .catch(error => {
             this.setState({
@@ -75,20 +75,20 @@ class signup extends Component {
     handleImageChange = (event) => {
         const image = event.target.files[0];
         const formData = new FormData();
-        this.setState({
-                imageInput: image.name
-            }
-        )
-        // formData.append('image', image, image.name);
-        // this.uploadImage(formData);
+        formData.append('image', image, image.name);
+        this.uploadImage(formData);
     };
 
     uploadImage = (formData) => {
         axios
-        .post('/user/image', formData)
-        .then(() => {
-        })
-        .catch((err) => console.log(err));              
+      .post('https://2ndwind.xyz:444/api/images/upload', formData)
+      .then((result) => {
+          let imageURL = result.data.imageUrl;
+          this.setState(
+            {imageInput: imageURL}
+          );
+      })
+      .catch((err) => console.log(err));              
     };
     
     handleChange = (event) => {

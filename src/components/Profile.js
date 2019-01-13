@@ -70,22 +70,35 @@ const styles = (theme) => ({
 class Profile extends Component {
 
   state = {
-    handle: '',
-    email: '',
-    address: '',
-    birthday: '',
-    questionone: '',
-    questiontwo: '',
-    questionthree: '',
-    open:false
+      handle: '',
+      email: '',
+      address: '',
+      birthday: '',
+      questionone: '',
+      questiontwo: '',
+      questionthree: '',
+      imageInput: '',
+      open : false
   };
+
+  componentDidMount = () => {
+    let token = localStorage.FBIdToken;
+    axios.defaults.headers.common['Authorization'] = token;
+    if (token) {
+        this.getUserData();       
+    }
+  }
 
 
   uploadImage = (formData) => {
       axios
-      .post('/user/image', formData)
-      .then(() => {
-          this.getUserData();
+      .post('https://2ndwind.xyz:444/api/images/upload', formData)
+      .then((result) => {
+          let imageURL = result.data.imageUrl;
+          this.setState(
+            {imageInput: imageURL}
+          );
+          this.han();
       })
       .catch((err) => console.log(err));              
   };
@@ -99,12 +112,24 @@ class Profile extends Component {
       axios
       .post('/user/detail')
       .then((res) => {
-          this.props.user = res.data;
+        this.mapDataToState(res.data);
       })
       .catch((err) => {
-        localStorage.removeItem('FBIdToken');
-        window.location.href = '/login';
+        console.error('something went wrong while retriving user data :' + JSON.stringify(err));
       });
+  }
+
+  mapDataToState = (data) => {
+    this.setState({
+      handle: data.handle,
+      email: data.email,
+      address: data.address,
+      birthday: data.birthday,
+      questionone: data.questionone,
+      questiontwo: data.questiontwo,
+      questionthree: data.questionthree,
+      imageInput: data.imageInput
+    });
   }
 
   handleImageChange = (event) => {
@@ -132,7 +157,13 @@ class Profile extends Component {
   handleSubmit = () => {
     const userDetails = {
       email: this.state.email,
-      handle: this.state.handle
+      handle: this.state.handle,
+      address: this.state.address,
+      birthday: this.state.birthday,
+      questionone: this.state.questionone,
+      questiontwo: this.state.questiontwo,
+      questionthree: this.state.questionthree,
+      imageInput: this.state.imageInput
     };
     this.editUserDetails(userDetails);
     this.handleClose();
@@ -148,8 +179,7 @@ class Profile extends Component {
 
     render() {
         let { 
-            classes,
-            user: {handle, createdAt, email, address, birthday, questionone, questiontwo, questionthree, imageInput}
+            classes
         } = this.props;
       
 
@@ -158,7 +188,7 @@ class Profile extends Component {
                 <div className={classes.profile}>
                     <div className="profile-image">
                     <div className="image-wrapper">
-                        <img src={imageInput} alt="profile" className="profile-image" />
+                        <img src={this.state.imageInput} alt="profile" className="profile-image" />
                         <input
                           type="file"
                           id="imageInput"
@@ -266,31 +296,31 @@ class Profile extends Component {
                     <div className="profile-details">
                         <h3>Handle</h3>
                         <Typography variant="body2">
-                            {handle}
+                            {this.state.handle}
                         </Typography>
                         <h3>Email</h3>
                         <Typography variant="body2">
-                            {email}
+                            {this.state.email}
                         </Typography>
                         <h3>Address</h3>
                         <Typography variant="body2">
-                            {address}
+                            {this.state.address}
                         </Typography>
                         <h3>Birthday</h3>
                         <Typography variant="body2">
-                          {birthday}
+                          {this.state.birthday}
                         </Typography>
                         <h3>Question One</h3>
                         <Typography variant="body2">
-                            {questionone}
+                            {this.state.questionone}
                         </Typography>
                         <h3>Question Two</h3>
                         <Typography variant="body2">
-                            {questiontwo}
+                            {this.state.questiontwo}
                         </Typography>
                         <h3>Question Three</h3>
                         <Typography variant="body2">
-                            {questionthree}
+                            {this.state.questionthree}
                         </Typography>
                     </div>
                 </div>

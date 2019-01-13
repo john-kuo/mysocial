@@ -3,7 +3,6 @@ import withStyles from '@material-ui/core/styles/withStyles'
 
 
 import Grid from '@material-ui/core/Grid'
-import axios from 'axios'
 import AppIcon from '../images/icon.png';
 
 
@@ -14,33 +13,6 @@ const styles = (theme) => ({
 });
 
 class home extends Component {
-    state = {
-        screams: null,
-        userData : {}
-    }
-    componentDidMount(){
-        let token = localStorage.FBIdToken;
-        axios.defaults.headers.common['Authorization'] = token;
-
-        if (token) {
-            this.getUserProfile(token);       
-        }
-    }
-
-    getUserProfile = (token) => {
-        axios
-        .post('/user/detail')
-        .then((res) => {
-            this.setState({
-                userData: res.data
-            });
-        })
-        .catch((err) => {
-            localStorage.removeItem('FBIdToken');
-            window.location.href = '/login';
-        });
-    }
-
 
     render() {
         const {classes} = this.props;

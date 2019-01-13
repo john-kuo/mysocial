@@ -46,7 +46,7 @@ class login extends Component {
             this.setState({
                 loading: false
             });
-            window.location.href = '/';
+            window.location.href = '/profile';
         })
         .catch(error => {
             this.setState({

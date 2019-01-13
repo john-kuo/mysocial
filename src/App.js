@@ -7,20 +7,16 @@ import themeFile from './util/theme'
 import jwtDecode from 'jwt-decode'
 import { Typography } from '@material-ui/core';
 
-
-
 //pages
 import home from './pages/home';
+import profile from './components/Profile';
 import login from './pages/login';
 import signup from './pages/signup';
 import NavBar from './components/Navbar';
-import AuthRoute from './util/AuthRoute';
 
 const theme = createMuiTheme(themeFile)
 
 const token = localStorage.FBIdToken;
-
-let authenticated;
 
 if (token) {
   const decode = jwtDecode(token);
@@ -28,9 +24,6 @@ if (token) {
   if (!decode.exp * 1000 > Date.now()) {
     localStorage.removeItem('FBIdToken');
     window.location.href = '/login';
-    authenticated = false;
-  } else {
-    authenticated = true;
   }
 }
 
@@ -43,8 +36,9 @@ function App() {
         <div className="container">
           <Switch>
             <Route exact path="/" component={home}/>
-            <AuthRoute exact path="/login" component={login} authenticated={authenticated}/>
-            <AuthRoute exact path="/signup" component={signup} authenticated={authenticated}/>
+            <Route exact path="/login" component={login}/>
+            <Route exact path="/signup" component={signup}/>
+            <Route exact path="/profile" component={profile}/>
           </Switch>
         </div>
       </Router>

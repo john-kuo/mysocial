@@ -8,6 +8,7 @@ Allows user to signup and view their profile
 
 start by installing all the dependencies
 `npm update`
+
 `npm install`
 
 then run the server by
