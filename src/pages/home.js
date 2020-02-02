@@ -1,9 +1,17 @@
 import React, { Component } from 'react'
+import withStyles from '@material-ui/core/styles/withStyles'
+
 
 import Grid from '@material-ui/core/Grid'
 import axios from 'axios'
+import AppIcon from '../images/icon.png';
 
-import Profile from '../components/Profile';
+
+import { Typography } from '@material-ui/core';
+
+const styles = (theme) => ({
+    ...theme.spreadIt  
+});
 
 class home extends Component {
     state = {
@@ -35,18 +43,20 @@ class home extends Component {
 
 
     render() {
-            const token = localStorage.FBIdToken;
-            let profileMarkup = token
-            ? (<Profile user={this.state.userData}/>) 
-            : <p>You have to login to see your profile</p>
+        const {classes} = this.props;
+
         return (
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
-                   {profileMarkup}
+            <Grid container className={classes.form}>
+                <Grid item sm>
+                    <div>
+                        <img src={AppIcon} alt="monkey" className={classes.image} />
+                        <Typography variant="h2" className={classes.pageTitle}>
+                            Welcome To MySocial
+                        </Typography>
+                    </div>
                 </Grid>
             </Grid>
         )
     }
 }
-
-export default home;
+export default withStyles(styles)(home)

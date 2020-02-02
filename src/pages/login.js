@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import Link from 'react-router-dom/Link'
 import withStyles from '@material-ui/core/styles/withStyles'
-import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 
@@ -118,11 +116,6 @@ class login extends Component {
             </Grid>
         );
     }
-}
-
-
-login.prototypes = {
-    classes : PropTypes.object.isRequired
 }
 
 export default withStyles(styles)(login)
